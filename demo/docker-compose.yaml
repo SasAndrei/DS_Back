@@ -1,0 +1,29 @@
+services:
+  app:
+    image: 'spring-energy:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5433/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - DB_IP = db
+      - DB_PORT = 5433
+      - DB_USER = postgres
+      - DB_PASSWORD = postgres
+      - DB_DBNAME = postgres
+    ports:
+      - 8080:8080
+
+  db:
+    image: 'postgres:latest'
+    ports:
+      - 5433:5432
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
