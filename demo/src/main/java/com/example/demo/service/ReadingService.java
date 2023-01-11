@@ -30,6 +30,15 @@ public class ReadingService {
         return readingsList;
     }
 
+    public List<ReadingDto> getReadingsOfDevicePerHour(DeviceReadingDto deviceReadingDto) {
+        List<Reading> readings = readingRepository.findAll();
+        Timestamp selectedDate = new Timestamp(deviceReadingDto.date_in_mil());
+        List<ReadingDto> readingsList = readings.stream().filter((reading) -> {return reading.getOwnedDevice().getId().equals(deviceReadingDto.device_id());})
+                .filter((reading) -> {return reading.compareHour(selectedDate);})
+                .map((reading) -> {return new ReadingDto(reading.getConsumption(), reading.getTimeOfRecord());}).toList();
+        return readingsList;
+    }
+
     public List<Reading> setDemoReadings(DeviceReadingDto deviceReadingDto) {
         Timestamp requestDate = new Timestamp(deviceReadingDto.date_in_mil());
         OwnedDevice ownedDevice = ownedDeviceRepository.getReferenceById(deviceReadingDto.device_id());

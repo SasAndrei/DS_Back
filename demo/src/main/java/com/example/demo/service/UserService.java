@@ -24,8 +24,8 @@ public class UserService {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//    @Autowired
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public List<UserDto> allUsers() {
         return userRepository.findAll().stream().map((user) -> new UserDto(user.getId(), user.getName(), user.getPassword(), user.getRole())).toList();

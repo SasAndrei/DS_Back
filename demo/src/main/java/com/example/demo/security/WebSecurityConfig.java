@@ -3,6 +3,7 @@ package com.example.demo.security;
 
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,13 +16,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private UnauthorizedEntryPoint unauthorizedEntryPoint;
+//    @Autowired
+//    private UnauthorizedEntryPoint unauthorizedEntryPoint;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -33,21 +35,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/*").permitAll()
-//                .antMatchers("/devices/**").permitAll()
-//                .antMatchers("/owned/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint)
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .antMatchers("/users/**").permitAll()
+                .antMatchers("/send").permitAll()
+                .antMatchers("/ws-message/**").permitAll()
+                .antMatchers("/devices/**").permitAll()
+                .antMatchers("/owned/**").permitAll()
                 .and()
                 .httpBasic();
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
-    public JwtRequestFilter authenticationTokenFilterBean() {
-        return new JwtRequestFilter();
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        // customize the restTemplate
+        return builder.build();
     }
+
+
+//    @Bean
+//    public JwtRequestFilter authenticationTokenFilterBean() {
+//        return new JwtRequestFilter();
+//    }
 }

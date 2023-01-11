@@ -67,4 +67,11 @@ public class Reading {
                 (this.timeOfRecord.getMonth() == time.getMonth()) &&
                 (this.timeOfRecord.getYear() == time.getYear());
     }
+
+    public boolean compareHour(Timestamp time) {
+        return  (this.timeOfRecord.getHours() == time.getHours()) &&
+                (this.timeOfRecord.getDay() == time.getDay()) &&
+                (this.timeOfRecord.getMonth() == time.getMonth()) &&
+                (this.timeOfRecord.getYear() == time.getYear());
+    }
 }
